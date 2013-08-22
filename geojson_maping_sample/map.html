@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>D3: Adding data points (circles) to the map</title>
+    <script type="text/javascript" src="../d3/d3.v3.js"></script>
+    <style type="text/css">
+      div.tooltip {
+              position: absolute;
+              text-align: center;
+              width: 100px;
+              padding: 5px;
+              color: white;
+              font: 14px sans-serif;
+              background: #222;
+              border: 0px;
+              border-radius: 2px;
+              pointer-events: none;
+      }
+      div.tooltip_city {
+              position: absolute;
+              text-align: center;
+              width: 100px;
+              padding: 5px;
+              color: black;
+              font: 14px sans-serif;
+              background: #FFE93D;
+              border: 0px;
+              border-radius: 2px;
+              pointer-events: none;
+      }
+</style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+      //Width and height
+      var w = 1200;
+      var h = 800;
+
+      //Create SVG element
+      var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+      d3.json("data/output_netherlands.json", function(json) {
+        var center = d3.geo.centroid(json)
+
+        //Define map projection
+        var projection = d3.geo.mercator()
+              .center(center)
+              .scale([30000])
+              .translate([w/2, h/2]);
+
+        //Define path generator
+        var path = d3.geo.path()
+                 .projection(projection);
+
+        svg.selectAll("path")
+          .data(json.features)
+          .enter()
+          .append("path")
+          .attr("d", path)
+          .style("fill", '#FF530D')
+          .style("stroke", '#000000');
+        });
+    </script>
+  </body>
+</html>
